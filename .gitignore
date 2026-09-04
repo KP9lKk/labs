@@ -1,0 +1,55 @@
+# ==========================================
+# IDE & Editors (JetBrains: Rider, IDEA, Android Studio)
+# ==========================================
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ==========================================
+# Database Tools (DBeaver)
+# ==========================================
+.dbeaver/
+.eclipse/
+*.dbeaver-data/
+
+# ==========================================
+# C# / .NET / Visual Studio / Rider builds
+# ==========================================
+bin/
+obj/
+out/
+[D-d]ebug/
+[R-r]elease/
+*.userprefs
+*.pidb
+*.versioncontrol
+*.csproj.user
+
+# ==========================================
+# Android Studio / Gradle / Kotlin
+# ==========================================
+.gradle/
+build/
+local.properties
+.navigation/
+captures/
+.externalNativeBuild
+.cxx/
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# ==========================================
+# OS Generated Files & Logs
+# ==========================================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
