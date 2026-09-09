@@ -38,7 +38,6 @@ when (cardType) {
     "Pokemon" -> println("Выводим Покемона на скамью")
     else -> println("Неизвестный тип карты")
 }
-
 ```
 
 #### **Б. Условные выражения (Expressions)**
