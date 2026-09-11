@@ -62,7 +62,10 @@
 ## 4. Эталонный пример реализации связующей сущности
 Используйте данный шаблон в качестве образца для проектирования промежуточных сущностей с составными ключами в EF Core 10:
 ```
-using System.ComponentModel.DataAnnotations;using System.ComponentModel.DataAnnotations.Schema;using Microsoft.EntityFrameworkCore; // Необходим для работы [PrimaryKey]
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore; 
+// Необходим для работы [PrimaryKey]
 namespace PokemonApi.Models;
 // 1. Указываем составной первичный ключ из двух ID прямо над классом
 [Table("PokemonTypes")]
