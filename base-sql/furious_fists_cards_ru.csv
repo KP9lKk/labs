@@ -1,0 +1,112 @@
+﻿card_id,card_number,card_name,card_rarity,card_type,card_image_url
+1,1/111,Беллспраут,Обычная,Pokemon,https://images.pokemontcg.io/xy3/1_hires.png
+2,2/111,Уипинбелл,Необычная,Pokemon,https://images.pokemontcg.io/xy3/2_hires.png
+3,3/111,Виктрибел,Редкая,Pokemon,https://images.pokemontcg.io/xy3/3_hires.png
+4,4/111,Геракросс-EX,Ультра редкая,Pokemon,https://images.pokemontcg.io/xy3/4_hires.png
+5,5/111,М Геракросс-EX,Ультра редкая,Pokemon,https://images.pokemontcg.io/xy3/5_hires.png
+6,6/111,Шелдер,Обычная,Pokemon,https://images.pokemontcg.io/xy3/6_hires.png
+7,7/111,Клойстер,Необычная,Pokemon,https://images.pokemontcg.io/xy3/7_hires.png
+8,8/111,Глейсеон,Редкая,Pokemon,https://images.pokemontcg.io/xy3/8_hires.png
+9,9/111,Сурскит,Обычная,Pokemon,https://images.pokemontcg.io/xy3/9_hires.png
+10,10/111,Маскерайн,Необычная,Pokemon,https://images.pokemontcg.io/xy3/10_hires.png
+11,11/111,Шелмет,Обычная,Pokemon,https://images.pokemontcg.io/xy3/11_hires.png
+12,12/111,Аксельгор,Редкая,Pokemon,https://images.pokemontcg.io/xy3/12_hires.png
+13,13/111,Магмар,Обычная,Pokemon,https://images.pokemontcg.io/xy3/13_hires.png
+14,14/111,Магмортар,Редкая,Pokemon,https://images.pokemontcg.io/xy3/14_hires.png
+15,15/111,Энтей,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/15_hires.png
+16,16/111,Торкoал,Необычная,Pokemon,https://images.pokemontcg.io/xy3/16_hires.png
+17,17/111,Литвик,Обычная,Pokemon,https://images.pokemontcg.io/xy3/17_hires.png
+18,18/111,Лампент,Необычная,Pokemon,https://images.pokemontcg.io/xy3/18_hires.png
+19,19/111,Брейксен,Необычная,Pokemon,https://images.pokemontcg.io/xy3/19_hires.png
+20,20/111,Поливаг,Обычная,Pokemon,https://images.pokemontcg.io/xy3/20_hires.png
+21,21/111,Полиуорл,Необычная,Pokemon,https://images.pokemontcg.io/xy3/21_hires.png
+22,22/111,Полирэйт,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/22_hires.png
+23,23/111,Слоупок,Обычная,Pokemon,https://images.pokemontcg.io/xy3/23_hires.png
+24,24/111,Сейсмитод-EX,Ультра редкая,Pokemon,https://images.pokemontcg.io/xy3/24_hires.png
+25,25/111,Кубчу,Обычная,Pokemon,https://images.pokemontcg.io/xy3/25_hires.png
+26,26/111,Бертик,Редкая,Pokemon,https://images.pokemontcg.io/xy3/26_hires.png
+27,27/111,Клоуцер,Редкая,Pokemon,https://images.pokemontcg.io/xy3/27_hires.png
+28,28/111,Пикачу,Обычная,Pokemon,https://images.pokemontcg.io/xy3/28_hires.png
+29,29/111,Райчу,Редкая,Pokemon,https://images.pokemontcg.io/xy3/29_hires.png
+30,30/111,Электабазз,Обычная,Pokemon,https://images.pokemontcg.io/xy3/30_hires.png
+31,31/111,Элективайр,Редкая,Pokemon,https://images.pokemontcg.io/xy3/31_hires.png
+32,32/111,Запдос,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/32_hires.png
+33,33/111,Тинамо,Обычная,Pokemon,https://images.pokemontcg.io/xy3/33_hires.png
+34,34/111,Электрик,Необычная,Pokemon,https://images.pokemontcg.io/xy3/34_hires.png
+35,35/111,Электросс,Редкая,Pokemon,https://images.pokemontcg.io/xy3/35_hires.png
+36,36/111,Дженгар,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/36_hires.png
+37,37/111,Драфтин,Обычная,Pokemon,https://images.pokemontcg.io/xy3/37_hires.png
+38,38/111,Дрифблим,Редкая,Pokemon,https://images.pokemontcg.io/xy3/38_hires.png
+39,39/111,Скоррупи,Обычная,Pokemon,https://images.pokemontcg.io/xy3/39_hires.png
+40,40/111,Голетт,Обычная,Pokemon,https://images.pokemontcg.io/xy3/40_hires.png
+41,41/111,Голарк,Редкая,Pokemon,https://images.pokemontcg.io/xy3/41_hires.png
+42,42/111,Макухита,Обычная,Pokemon,https://images.pokemontcg.io/xy3/42_hires.png
+43,43/111,Харияма,Редкая,Pokemon,https://images.pokemontcg.io/xy3/43_hires.png
+44,44/111,Трапинч,Обычная,Pokemon,https://images.pokemontcg.io/xy3/44_hires.png
+45,45/111,Вибрава,Необычная,Pokemon,https://images.pokemontcg.io/xy3/45_hires.png
+46,46/111,Флайгон,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/46_hires.png
+47,47/111,Риолу,Обычная,Pokemon,https://images.pokemontcg.io/xy3/47_hires.png
+48,48/111,Минфу,Обычная,Pokemon,https://images.pokemontcg.io/xy3/48_hires.png
+49,49/111,Миншао,Редкая,Pokemon,https://images.pokemontcg.io/xy3/49_hires.png
+50,50/111,Панчам,Обычная,Pokemon,https://images.pokemontcg.io/xy3/50_hires.png
+51,51/111,Панчам,Обычная,Pokemon,https://images.pokemontcg.io/xy3/51_hires.png
+52,52/111,Пангоро,Редкая,Pokemon,https://images.pokemontcg.io/xy3/52_hires.png
+53,53/111,Бинакл,Обычная,Pokemon,https://images.pokemontcg.io/xy3/53_hires.png
+54,54/111,Лукарио-EX,Ультра редкая,Pokemon,https://images.pokemontcg.io/xy3/54_hires.png
+55,55/111,М Лукарио-EX,Ультра редкая,Pokemon,https://images.pokemontcg.io/xy3/55_hires.png
+56,56/111,Паччам,Обычная,Pokemon,https://images.pokemontcg.io/xy3/56_hires.png
+57,57/111,Скрагги,Обычная,Pokemon,https://images.pokemontcg.io/xy3/57_hires.png
+58,58/111,Скрафти,Редкая,Pokemon,https://images.pokemontcg.io/xy3/58_hires.png
+59,59/111,Ивельтал,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/59_hires.png
+60,60/111,Клефэйри,Обычная,Pokemon,https://images.pokemontcg.io/xy3/60_hires.png
+61,61/111,Клефэйбл,Редкая,Pokemon,https://images.pokemontcg.io/xy3/61_hires.png
+62,62/111,Тогепи,Обычная,Pokemon,https://images.pokemontcg.io/xy3/62_hires.png
+63,63/111,Тогетик,Необычная,Pokemon,https://images.pokemontcg.io/xy3/63_hires.png
+64,64/111,Тогекисс,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/64_hires.png
+65,65/111,Марилл,Обычная,Pokemon,https://images.pokemontcg.io/xy3/65_hires.png
+66,66/111,Азумарилл,Редкая,Pokemon,https://images.pokemontcg.io/xy3/66_hires.png
+67,67/111,Карбинк,Необычная,Pokemon,https://images.pokemontcg.io/xy3/67_hires.png
+68,68/111,Дратини,Обычная,Pokemon,https://images.pokemontcg.io/xy3/68_hires.png
+69,69/111,Драгонейр,Необычная,Pokemon,https://images.pokemontcg.io/xy3/69_hires.png
+70,70/111,Драгонайт,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/70_hires.png
+71,71/111,Вибрава,Необычная,Pokemon,https://images.pokemontcg.io/xy3/71_hires.png
+72,72/111,Флайгон,Редкая,Pokemon,https://images.pokemontcg.io/xy3/72_hires.png
+73,73/111,Диалга,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/73_hires.png
+74,74/111,Тирантрум,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/74_hires.png
+75,75/111,Гуми,Обычная,Pokemon,https://images.pokemontcg.io/xy3/75_hires.png
+76,76/111,Слиггу,Необычная,Pokemon,https://images.pokemontcg.io/xy3/76_hires.png
+77,77/111,Гудра,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/77_hires.png
+78,78/111,Лайкард,Обычная,Pokemon,https://images.pokemontcg.io/xy3/78_hires.png
+79,79/111,Снорлакс,Редкая,Pokemon,https://images.pokemontcg.io/xy3/79_hires.png
+80,80/111,Скитти,Обычная,Pokemon,https://images.pokemontcg.io/xy3/80_hires.png
+81,81/111,Делкатти,Редкая,Pokemon,https://images.pokemontcg.io/xy3/81_hires.png
+82,82/111,Свалблу,Обычная,Pokemon,https://images.pokemontcg.io/xy3/82_hires.png
+83,83/111,Алтария,Редкая,Pokemon,https://images.pokemontcg.io/xy3/83_hires.png
+84,84/111,Запдос,Редкая,Pokemon,https://images.pokemontcg.io/xy3/84_hires.png
+85,85/111,Пачирису,Обычная,Pokemon,https://images.pokemontcg.io/xy3/85_hires.png
+86,86/111,Брейвери,Редкая,Pokemon,https://images.pokemontcg.io/xy3/86_hires.png
+87,87/111,Слейкинг,Редкая голографическая,Pokemon,https://images.pokemontcg.io/xy3/87_hires.png
+88,88/111,Коррина,Необычная,Trainer,https://images.pokemontcg.io/xy3/88_hires.png
+89,89/111,Техническое обслуживание,Необычная,Trainer,https://images.pokemontcg.io/xy3/89_hires.png
+90,90/111,Горное кольцо,Необычная,Trainer,https://images.pokemontcg.io/xy3/90_hires.png
+91,91/111,Спрей с окарина,Необычная,Trainer,https://images.pokemontcg.io/xy3/91_hires.png
+92,92/111,Защитное поле,Необычная,Trainer,https://images.pokemontcg.io/xy3/92_hires.png
+93,93/111,Исследователь фоссилов,Необычная,Trainer,https://images.pokemontcg.io/xy3/93_hires.png
+94,94/111,Фоссил Челюсти,Необычная,Trainer,https://images.pokemontcg.io/xy3/94_hires.png
+95,95/111,Фоссил Панциря,Необычная,Trainer,https://images.pokemontcg.io/xy3/95_hires.png
+96,96/111,Письмо профессора,Необычная,Trainer,https://images.pokemontcg.io/xy3/96_hires.png
+97,97/111,Дух-ссылка Геракросса,Необычная,Trainer,https://images.pokemontcg.io/xy3/97_hires.png
+98,98/111,Дух-ссылка Лукарио,Необычная,Trainer,https://images.pokemontcg.io/xy3/98_hires.png
+99,99/111,Спортивный зал Боевого типа,Необычная,Trainer,https://images.pokemontcg.io/xy3/99_hires.png
+100,100/111,Энергозамещатель,Необычная,Trainer,https://images.pokemontcg.io/xy3/100_hires.png
+101,101/111,Лечебный центрифуга,Необычная,Trainer,https://images.pokemontcg.io/xy3/101_hires.png
+102,102/111,Фоссил Янтаря,Необычная,Trainer,https://images.pokemontcg.io/xy3/102_hires.png
+103,103/111,Мощная энергия,Необычная,Energy,https://images.pokemontcg.io/xy3/103_hires.png
+104,104/111,Травяная энергия,Необычная,Energy,https://images.pokemontcg.io/xy3/104_hires.png
+105,105/111,Геракросс-EX,Ультра редкая,Pokemon,https://images.pokemontcg.io/xy3/105_hires.png
+106,106/111,Сейсмитод-EX,Ультра редкая,Pokemon,https://images.pokemontcg.io/xy3/106_hires.png
+107,107/111,Лукарио-EX,Ультра редкая,Pokemon,https://images.pokemontcg.io/xy3/107_hires.png
+108,108/111,Dragonite-EX,Ультра редкая,Pokemon,https://images.pokemontcg.io/xy3/108_hires.png
+109,109/111,Коррина,Ультра редкая,Trainer,https://images.pokemontcg.io/xy3/109_hires.png
+110,110/111,M Геракросс-EX,Секретная редкая,Pokemon,https://images.pokemontcg.io/xy3/110_hires.png
+111,111/111,M Лукарио-EX,Секретная редкая,Pokemon,https://images.pokemontcg.io/xy3/111_hires.png
