@@ -16,6 +16,7 @@
 **Типы монтирования:**
 - **Named volume** — том с именем, управляемый Docker (например, `pgdata_lab2`). Располагается в `/var/lib/docker/volumes/`.
 - **Bind mount** — монтирование конкретной директории хоста в контейнер (например, `-v /home/user/pgdata:/var/lib/postgresql/data`).
+- **Примечание** — в новых версиях postgres ииспользуется следующее монитирование `-v /home/user/pgdata:/var/lib/postgresql`.
 
 **Основные команды:**
 - `docker volume create [имя]` — создать том.
@@ -75,7 +76,6 @@
    docker volume ls
    docker volume inspect pgdata_vol
    ```
-   Запишите в отчёт путь `Mountpoint` (где физически хранятся данные на хосте).
 4. Запустите контейнер PostgreSQL с этим томом:
    ```bash
    docker run -d --name pg-vol \
