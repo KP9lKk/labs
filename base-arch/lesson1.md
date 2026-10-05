@@ -108,8 +108,8 @@ fun main() {
 
 ```kotlin
 fun main() {
-    val a = 5
-    val b = 10
+    val a = readln().toInt()
+    val b = readln().toInt()
     val max = if (a > b) a else b
     println(max)
 }
