@@ -500,8 +500,10 @@ docker run -d --name pg-config \
    docker exec pg-config nproc
    ```
 2. Узнайте объём оперативной памяти (в МБ):
+   
    ```bash
-   docker exec pg-config free -m | grep Mem | awk '{print $2}'
+   docker exec -it pg-config bash
+   free -m | grep Mem | awk '{print $2}'
    ```
    Запишите полученные значения: `CPU = ____`, `RAM = ____ MB`.
 
