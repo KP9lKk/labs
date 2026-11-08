@@ -1,61 +1,379 @@
-# Лабораторная работа: Конфигурирование экземпляра, баз данных и сеансов PostgreSQL
+# Лабораторная работа № 2
 
-#### 1. Входные данные (Контекст)
-Используется СУБД PostgreSQL 16, развернутая в Docker-контейнере `johto-tcg-server`. Задача — освоить управление параметрами конфигурации СУБД на трех уровнях: сеанса (`SET`), базы данных (`ALTER DATABASE`) и всего экземпляра (`ALTER SYSTEM`), а также научиться применять настройки без остановки сервера[cite: 2].
-
----
-
-#### 2. Справка по командам и функциям
-
-* **`SHOW <parameter_name>;`** — просмотр текущего значения параметра.
-* **`SET <parameter_name> = 'value';`** — установка параметра в рамках текущего сеанса[cite: 2].
-* **`ALTER DATABASE <db_name> SET <parameter_name> = 'value';`** — фиксирование настройки для конкретной базы данных (автоматически активируется при каждом новом подключении к ней)[cite: 2].
-* **`ALTER SYSTEM SET <parameter_name> = 'value';`** — запись параметра в файл `postgresql.auto.conf` для всего экземпляра.
-* **`SELECT pg_reload_conf();`** — отправка серверу сигнала перечитать файлы конфигурации.
+## Тема: Docker volumes и конфигурация psql
 
 ---
 
-#### 3. Требования к выполнению работы
+## 1. Краткие теоретические сведения
 
-Сформировать скрипт `lab_configuration.sql` со следующими шагами:
+### 1.1. Docker volumes (тома)
+**Volume** — это механизм Docker для постоянного хранения данных, создаваемых и используемых контейнерами.  
+Без томов все данные, записанные внутри контейнера, исчезают при его удалении. Тома позволяют:
+- сохранять данные между перезапусками и пересозданием контейнера;
+- совместно использовать данные между несколькими контейнерами;
+- хранить данные на хосте в управляемом Docker месте.
 
-1. **Шаг 1 (Анализ параметров):** 
-   * С помощью `SHOW config_file;` определить путь к конфигурационному файлу.
-   * Выполнить запрос к `pg_settings` для параметров `work_mem`, `search_path` и `log_statement`, выведя их текущие значения и контекст применения (`context`).
-2. **Шаг 2 (Управление на уровне сеанса):**
-   * Изменить путь поиска схем текущего сеанса: `SET search_path = public, starter_set;`[cite: 2].
-   * Изменить значение `work_mem` до `64MB` для текущей сессии.
-   * Проверить изменения с помощью `SHOW`.
-3. **Шаг 3 (Управление на уровне базы данных):**
-   * Зафиксировать путь поиска схем `search_path` на уровне базы данных `johto_db` командой:
-     `ALTER DATABASE johto_db SET search_path = public, starter_set;`[cite: 2]
-   * Переподключиться к базе `johto_db` (`\c johto_db`) и убедиться через `SHOW search_path;`, что параметр применился автоматически[cite: 2].
-4. **Шаг 4 (Конфигурирование экземпляра):**
-   * Изменить уровень логирования `log_statement` на `'all'` с помощью команды `ALTER SYSTEM`.
-   * Выполнить `SELECT pg_reload_conf();` для применения параметров.
-   * Проверить через `pg_settings`, что источник (`source`) параметра `log_statement` изменился на `configuration file`.
-5. **Шаг 5 (Очистка):**
-   * Сбросить измененный параметр с помощью `ALTER SYSTEM RESET log_statement;`.
-   * Применить изменения через `SELECT pg_reload_conf();`.
+**Типы монтирования:**
+- **Named volume** — том с именем, управляемый Docker (например, `pgdata_lab2`). Располагается в `/var/lib/docker/volumes/`.
+- **Bind mount** — монтирование конкретной директории хоста в контейнер (например, `-v /home/user/pgdata:/var/lib/postgresql/data`).
+
+**Основные команды:**
+- `docker volume create [имя]` — создать том.
+- `docker volume ls` — список томов.
+- `docker volume inspect [имя]` — информация о томе (место хранения, точка монтирования).
+- `docker volume rm [имя]` — удалить том (только если не используется).
+- `docker run -v [имя_тома]:[путь_в_контейнере] ...` — подключить том к контейнеру.
+- `docker run -v [путь_на_хосте]:[путь_в_контейнере] ...` — bind mount.
+
+### 1.2. Конфигурация psql
+`psql` — терминальный клиент PostgreSQL. Его поведение можно настраивать:
+- **Файл `.psqlrc`** — размещается в домашней директории пользователя (`~/.psqlrc`). Выполняется при каждом запуске psql. Содержит метакоманды и переменные.
+- **Системный файл `psqlrc`** — общий для всех пользователей, находится в `SYSCONFDIR` (например, `/etc/postgresql-common/psqlrc`).
+- **Переменные окружения:** `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, `PSQLRC`, `PSQL_PAGER` и др.
+- **Командная строка:** ключи `-h`, `-p`, `-U`, `-d`, `-c`, `-f`, `-v`, `-X` (не читать `.psqlrc`), `-q` и т.д.
+
+**Метакоманды для настройки:**
+- `\set [переменная] [значение]` — установить переменную psql.
+- `\unset [переменная]` — удалить переменную.
+- `\echo [текст]` — вывести текст.
+- `\pset [опция] [значение]` — настроить формат вывода (например, `\pset null '<NULL>'`, `\x`, `\timing`).
+- `\timing` — включить/выключить вывод времени выполнения.
+- `\x` — переключить расширенный вывод.
+- `\conninfo` — информация о текущем подключении.
+- `\?` — справка по метакомандам.
+- `\? variables` — список переменных.
+
+**Переменные psql:**
+- `:DBNAME`, `:USER`, `:HOST`, `:PORT` — автоматически заполняются.
+- Можно создавать свои: `\set myvar 'значение'`, использовать как `:myvar`.
+- Специальные переменные: `AUTOCOMMIT`, `ON_ERROR_ROLLBACK`, `PROMPT1`, `PROMPT2`, `HISTFILE`, `HISTSIZE` и др.
 
 ---
 
-#### 4. Чек-лист самопроверки перед сдачей
+## 2. Порядок выполнения работы
 
-* [ ] Определен физический путь к файлу `postgresql.conf`.
-* [ ] Продемонстрировано различие между временной установкой через `SET` и постоянной фиксацией для БД через `ALTER DATABASE`[cite: 2].
-* [ ] При переподключении к базе подтверждено сохранение параметра `search_path`[cite: 2].
-* [ ] Выполнен сброс тестовых системных настроек `ALTER SYSTEM RESET`.
+Работа выполняется в командной строке (Terminal / PowerShell). Все команды выполняются последовательно.
 
 ---
 
-#### 5. Защита и критерии оценивания
+### Задание 1. Создание и использование Docker volume
 
-Лабораторная работа оценивается максимум в **5 баллов**:
-* **4 балла** — Практическая часть (правильное использование `SET`, `ALTER DATABASE`, `ALTER SYSTEM`, понимание работы `pg_settings`).
-* **1 балл** — Ответ на индивидуальный вопрос защиты.
+**Цель:** научиться создавать том, подключать его к контейнеру PostgreSQL и проверять сохранность данных.
 
-**Вопросы для защиты:**
-1. *Чем отличается действие команды `SET` от `ALTER DATABASE ... SET ...`?*[cite: 2]
-2. *Что происходит с параметрами, заданными через `ALTER DATABASE`, когда пользователь переподключается к этой базе?*[cite: 2]
-3. *В какой файл записываются параметры при выполнении команды `ALTER SYSTEM`?*
+#### Техническое задание:
+1. Остановите и удалите все существующие контейнеры PostgreSQL (если есть):
+   ```bash
+   docker stop my-postgres my-postgres-lab2
+   docker rm my-postgres my-postgres-lab2
+   ```
+2. Создайте именованный том `pgdata_vol`:
+   ```bash
+   docker volume create pgdata_vol
+   ```
+3. Посмотрите список томов и информацию о созданном томе:
+   ```bash
+   docker volume ls
+   docker volume inspect pgdata_vol
+   ```
+   Запишите в отчёт путь `Mountpoint` (где физически хранятся данные на хосте).
+4. Запустите контейнер PostgreSQL с этим томом:
+   ```bash
+   docker run -d --name pg-vol \
+     -e POSTGRES_PASSWORD=mysecretpassword \
+     -p 5432:5432 \
+     -v pgdata_vol:/var/lib/postgresql/data \
+     postgres:latest
+   ```
+5. Подключитесь к psql и создайте тестовую таблицу с данными:
+   ```bash
+   docker exec -it pg-vol psql -U postgres
+   ```
+   ```sql
+   CREATE DATABASE vol_test;
+   \c vol_test
+   CREATE TABLE items (id SERIAL PRIMARY KEY, name TEXT);
+   INSERT INTO items (name) VALUES ('Item 1'), ('Item 2');
+   SELECT * FROM items;
+   \q
+   ```
+6. Остановите и удалите контейнер (том остаётся):
+   ```bash
+   docker stop pg-vol
+   docker rm pg-vol
+   ```
+7. Запустите новый контейнер с тем же томом и другим именем:
+   ```bash
+   docker run -d --name pg-vol2 \
+     -e POSTGRES_PASSWORD=mysecretpassword \
+     -p 5432:5432 \
+     -v pgdata_vol:/var/lib/postgresql/data \
+     postgres:latest
+   ```
+8. Подключитесь и проверьте, что база `vol_test` и таблица `items` сохранились:
+   ```bash
+   docker exec -it pg-vol2 psql -U postgres -d vol_test -c "SELECT * FROM items;"
+   ```
+
+**Ожидаемый результат:** после пересоздания контейнера данные в таблице `items` остались на месте.
+
+---
+
+### Задание 2. Bind mount: монтирование директории хоста
+
+**Цель:** научиться использовать bind mount для хранения данных в произвольной папке на хосте.
+
+#### Техническое задание:
+1. Остановите и удалите контейнер `pg-vol2`:
+   ```bash
+   docker stop pg-vol2
+   docker rm pg-vol2
+   ```
+2. Создайте на хосте директорию для данных, например `~/pgdata_bind`:
+   ```bash
+   mkdir ~/pgdata_bind
+   ```
+3. Запустите контейнер с bind mount:
+   ```bash
+   docker run -d --name pg-bind \
+     -e POSTGRES_PASSWORD=mysecretpassword \
+     -p 5432:5432 \
+     -v ~/pgdata_bind:/var/lib/postgresql/data \
+     postgres:latest
+   ```
+4. Проверьте, что в директории `~/pgdata_bind` появились файлы PostgreSQL:
+   ```bash
+   ls ~/pgdata_bind
+   ```
+5. Создайте базу и таблицу:
+   ```bash
+   docker exec -it pg-bind psql -U postgres -c "CREATE DATABASE bind_test;"
+   docker exec -it pg-bind psql -U postgres -d bind_test -c "CREATE TABLE t (id int); INSERT INTO t VALUES (1);"
+   ```
+6. Остановите контейнер и запустите новый с той же директорией:
+   ```bash
+   docker stop pg-bind && docker rm pg-bind
+   docker run -d --name pg-bind2 \
+     -e POSTGRES_PASSWORD=mysecretpassword \
+     -p 5432:5432 \
+     -v ~/pgdata_bind:/var/lib/postgresql/data \
+     postgres:latest
+   ```
+7. Проверьте сохранность данных:
+   ```bash
+   docker exec -it pg-bind2 psql -U postgres -d bind_test -c "SELECT * FROM t;"
+   ```
+
+**Ожидаемый результат:** данные сохранились, так как они хранятся в папке на хосте.
+
+---
+
+### Задание 3. Настройка psql через файл `.psqlrc`
+
+**Цель:** научиться настраивать psql с помощью пользовательского файла `.psqlrc`.
+
+#### Техническое задание:
+1. Убедитесь, что контейнер `pg-bind2` запущен. Подключитесь к нему:
+   ```bash
+   docker exec -it pg-bind2 psql -U postgres
+   ```
+2. Выйдите из psql (`\q`). Создайте файл `.psqlrc` в домашней директории пользователя **внутри контейнера**. Для этого можно использовать `docker exec` с `bash`:
+   ```bash
+   docker exec -it pg-bind2 bash
+   ```
+   Внутри контейнера:
+   ```bash
+   echo "\set PROMPT1 '%n@%/%R%# '" >> ~/.psqlrc
+   echo "\set PROMPT2 '%n@%/%R%# '" >> ~/.psqlrc
+   echo "\timing on" >> ~/.psqlrc
+   echo "\pset null '<NULL>'" >> ~/.psqlrc
+   exit
+   ```
+3. Снова подключитесь к psql:
+   ```bash
+   docker exec -it pg-bind2 psql -U postgres
+   ```
+4. Проверьте, что приглашение изменилось (теперь содержит имя пользователя и базу), и что время выполнения команд выводится:
+   ```sql
+   SELECT 1;
+   ```
+   В выводе должно быть `Time: ... ms`.
+5. Проверьте отображение NULL:
+   ```sql
+   SELECT NULL AS empty_value;
+   ```
+   Вместо пустоты должно быть `<NULL>`.
+6. Выйдите из psql.
+
+**Ожидаемый результат:** настройки из `.psqlrc` применились автоматически при входе.
+
+---
+
+### Задание 4. Использование переменных psql и метакоманд
+
+**Цель:** освоить переменные и метакоманды для управления выводом.
+
+#### Техническое задание:
+1. Подключитесь к psql:
+   ```bash
+   docker exec -it pg-bind2 psql -U postgres -d bind_test
+   ```
+2. Установите переменную `myvar` и выведите её:
+   ```sql
+   \set myvar 'Hello, PostgreSQL!'
+   \echo :myvar
+   ```
+3. Используйте переменную в SQL-запросе:
+   ```sql
+   SELECT :'myvar' AS greeting;
+   ```
+4. Включите расширенный вывод и посмотрите результат:
+   ```sql
+   \x
+   SELECT * FROM t;
+   \x
+   ```
+5. Настройте формат вывода без выравнивания и с разделителем `|`:
+   ```sql
+   \a
+   \pset fieldsep '|'
+   SELECT * FROM t;
+   \a
+   ```
+6. Посмотрите список всех переменных psql:
+   ```sql
+   \set
+   ```
+   Найдите переменные `AUTOCOMMIT`, `PROMPT1`, `HISTFILE` и их значения.
+7. Выйдите из psql.
+
+**Ожидаемый результат:** переменная выводится, расширенный формат работает, настройки применяются.
+
+---
+
+### Задание 5. Управление подключением через переменные окружения
+
+**Цель:** научиться задавать параметры подключения через переменные окружения.
+
+#### Техническое задание:
+1. Выйдите из контейнера, если вы внутри. Установите переменные окружения в текущей сессии хоста (Linux/macOS) или в PowerShell (Windows):
+   - Linux/macOS:
+     ```bash
+     export PGHOST=localhost
+     export PGPORT=5432
+     export PGUSER=postgres
+     export PGPASSWORD=mysecretpassword
+     export PGDATABASE=bind_test
+     ```
+   - Windows PowerShell:
+     ```powershell
+     $env:PGHOST="localhost"
+     $env:PGPORT="5432"
+     $env:PGUSER="postgres"
+     $env:PGPASSWORD="mysecretpassword"
+     $env:PGDATABASE="bind_test"
+     ```
+2. Установите `psql` на хост-машине (если ещё не установлен) или используйте `docker exec` без указания параметров.  
+   Если psql установлен на хосте, просто выполните:
+   ```bash
+   psql -c "SELECT current_database(), current_user;"
+   ```
+   Убедитесь, что подключение произошло к базе `bind_test` под пользователем `postgres`.
+3. Если psql на хосте нет, можно проверить переменные внутри контейнера, передав их через `-e`:
+   ```bash
+   docker run --rm -e PGHOST=localhost -e PGUSER=postgres -e PGPASSWORD=mysecretpassword -e PGDATABASE=bind_test postgres:latest psql -c "SELECT current_database();"
+   ```
+4. Сбросьте переменные (Linux/macOS):
+   ```bash
+   unset PGHOST PGPORT PGUSER PGPASSWORD PGDATABASE
+   ```
+
+**Ожидаемый результат:** psql подключается, используя переменные окружения без явного указания параметров.
+
+---
+
+### Задание 6. Использование ключа `-X` и файла `psqlrc` для системных настроек
+
+**Цель:** понять разницу между пользовательским и системным `.psqlrc`.
+
+#### Техническое задание:
+1. Создайте системный файл `psqlrc` внутри контейнера. Для этого зайдите в контейнер:
+   ```bash
+   docker exec -it pg-bind2 bash
+   ```
+2. Узнайте путь для системного `psqlrc`:
+   ```bash
+   pg_config --sysconfdir
+   ```
+   Обычно это `/etc/postgresql-common` или `/usr/local/pgsql/etc`. Создайте файл `psqlrc` в этом каталоге (потребуется права root, но в контейнере вы root):
+   ```bash
+   echo "\echo 'System psqlrc loaded'" > $(pg_config --sysconfdir)/psqlrc
+   exit
+   ```
+3. Подключитесь к psql:
+   ```bash
+   docker exec -it pg-bind2 psql -U postgres
+   ```
+   Вы должны увидеть сообщение `System psqlrc loaded` перед приглашением.
+4. Выйдите и подключитесь с ключом `-X`, который запрещает чтение `.psqlrc`:
+   ```bash
+   docker exec -it pg-bind2 psql -X -U postgres
+   ```
+   Сообщение `System psqlrc loaded` не должно появиться.
+5. Выйдите из psql.
+
+**Ожидаемый результат:** системный `psqlrc` выполняется, но `-X` его отключает.
+
+---
+
+### Задание 7. Сохранение истории команд и настройка редактора
+
+**Цель:** настроить сохранение истории и удобный редактор для psql.
+
+#### Техническое задание:
+1. Войдите в psql и проверьте текущие переменные истории:
+   ```sql
+   \set HISTFILE
+   \set HISTSIZE
+   ```
+2. Установите свой файл истории и размер:
+   ```sql
+   \set HISTFILE ~/.psql_history_custom
+   \set HISTSIZE 1000
+   ```
+3. Выполните несколько команд, затем выйдите.
+4. Проверьте, что файл `~/.psql_history_custom` создан внутри контейнера:
+   ```bash
+   docker exec -it pg-bind2 bash -c "cat ~/.psql_history_custom"
+   ```
+5. Настройте редактор для psql (например, `nano`). Установите переменную окружения `PSQL_EDITOR` или `EDITOR`:
+   ```bash
+   docker exec -it pg-bind2 bash -c "export PSQL_EDITOR=nano; psql -U postgres -c '\e'"
+   ```
+   (Примечание: `\e` откроет редактор для ввода запроса; выйдите из nano без сохранения.)
+
+**Ожидаемый результат:** история сохраняется в указанный файл, редактор вызывается.
+
+---
+
+## 3. Контрольные вопросы
+
+1. Чем отличается named volume от bind mount?
+2. Как посмотреть, где физически хранится Docker volume?
+3. Что произойдёт с данными, если удалить контейнер, но оставить том?
+4. Какой файл в домашней директории пользователя настраивает psql?
+5. Как запретить psql читать файл `.psqlrc`?
+6. Какие переменные окружения влияют на подключение psql?
+7. Как вывести список всех переменных psql?
+8. Как изменить приглашение psql на `пользователь@база=#`?
+
+---
+
+## 4. Уборка
+
+Остановите и удалите контейнеры и тома (если больше не нужны):
+```bash
+docker stop pg-bind2
+docker rm pg-bind2
+docker volume rm pgdata_vol
+rm -rf ~/pgdata_bind
+```
